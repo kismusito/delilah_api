@@ -77,6 +77,17 @@ export const checkFields = (data = []) => {
                         };
                     }
                     break;
+                case "array":
+                    if (!Array.isArray(field.value)) {
+                        response = {
+                            status: false,
+                            errors: [
+                                ...response.errors,
+                                `The field ${field.text} is not a valid array format`,
+                            ],
+                        };
+                    }
+                    break;
                 default:
                     break;
             }
@@ -89,11 +100,18 @@ export const checkFields = (data = []) => {
 export const convertRowDataPacket = (data) => {
     const stringifyData = JSON.stringify(data);
     const parseData = JSON.parse(stringifyData);
-
     if (parseData.length > 1) {
         return {
             type: "array",
             data: parseData,
+        };
+    }
+
+    if (parseData.length === 0) {
+        return {
+            type: "array",
+            empty: true,
+            data: [],
         };
     }
 

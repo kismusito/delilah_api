@@ -22,7 +22,7 @@ userMethods.login = async (req, res) => {
                 ? "email"
                 : "username";
             const getUser = await db.query(
-                `SELECT * FROM users WHERE ${searchBy} = ?`,
+                `SELECT U.* , R.rol_name FROM users U INNER JOIN roles R ON R.id = U.rol WHERE U.${searchBy} = ?`,
                 [emailorusername]
             );
             if (getUser) {
@@ -37,8 +37,12 @@ userMethods.login = async (req, res) => {
                         ) {
                             const token = await jwt.sign(
                                 {
-                                    userID: parseData.data.id,
+                                    id: parseData.data.id,
+                                    rol: parseData.data.rol_name,
                                     email: parseData.data.email,
+                                    username: parseData.data.username,
+                                    phone: parseData.data.phone,
+                                    address: parseData.data.address,
                                 },
                                 config.private_key,
                                 {
@@ -101,14 +105,8 @@ userMethods.login = async (req, res) => {
  */
 userMethods.register = async (req, res) => {
     try {
-        const {
-            username,
-            email,
-            password,
-            full_name,
-            phone,
-            address,
-        } = req.body;
+        const { username, email, password, full_name, phone, address } =
+            req.body;
         const verifyData = checkFields([
             {
                 text: "username",

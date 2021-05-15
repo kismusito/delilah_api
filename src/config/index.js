@@ -9,4 +9,11 @@ export const config = {
         password: process.env.DBPASSWORD || "",
     },
     private_key: process.env.PRIVATE_KEY || "GvZXJoGDyXCyxrBYurREzLcAhAbPgHMf",
+    posible_order_statuses: [
+        "Nuevo",
+        "Confirmado",
+        "Preparando",
+        "Enviando",
+        "Entregado",
+    ],
 };

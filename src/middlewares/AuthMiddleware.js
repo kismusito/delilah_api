@@ -7,9 +7,8 @@ export const AuthMiddleware = async (req, res, next) => {
         const token = req.headers["authorization"];
         if (token) {
             const verify = jwt.verify(token, config.private_key);
-            const user = await getUserByParam(verify.userID, "id");
-            if (user.status) {
-                req.user = user.user;
+            if (verify) {
+                req.user = verify;
                 next();
             } else {
                 return res.status(400).json({
