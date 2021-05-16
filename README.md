@@ -25,11 +25,13 @@ change the file .env.template to .env
 ```sh
 PRIVATE_KEY= private key for token
 
-DBHOST= host
+DBHOST=localhost
 DBNAME= database name
-DBUSER= database user
+DBUSER=root
 DBPASSWORD= database password
 ```
+
+if this not works configure access in src/config/index.js
 
 #### Preconfigured credentials
 
@@ -45,7 +47,7 @@ Normal user
     password: user
 ```
 
-if this not works configure acces in src/config/index.js
+
 
 Install the dependencies and devDependencies and start the server.
 
