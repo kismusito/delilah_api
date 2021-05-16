@@ -1,0 +1,1183 @@
+swagger: '2.0'
+info:
+  description: |
+    Delilah API - Acamica three project
+  version: 1.0.0
+  title: Delilah API
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: kismu35891@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+- name: User
+  description: User endpoints
+- name: Products
+  description: Manage all products
+- name: Orders
+  description: Manage users orders
+- name: Payment methods
+  description: Manage app payment methos
+- name: Order statuses
+  description: Create customs order statuses
+
+
+paths:
+  /user/login/:
+    post:
+      tags:
+      - User
+      summary: Login in the app
+      operationId: login
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: User login credentials
+        required: true
+        schema:
+          properties:
+            emailorusername:
+              type: string
+            password: 
+              type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties: 
+              status:
+                type: boolean
+              token:
+                type: string
+              message: 
+                type: string
+        400:
+          description: Bad request
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: User or password incorrect | All fields are required
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /user/register:
+    post:
+      tags:
+      - User
+      summary: Register in the app
+      operationId: register
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: User register credentials
+        required: true
+        schema:
+          properties:
+            username:
+              type: string
+            email:
+              type: string
+            password:
+              type: string
+            full_name:
+              type: string
+            phone: 
+              type: string
+            address: 
+              type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: User registered successfully.
+        400:
+          description: Bad request
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: The username is already taken. | The email is already taken.
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /user/authenticate:
+    get:
+      tags:
+      - User
+      description: Authenticate user token
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        description: User token authenticate
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: Correct token and credentials.
+        400:
+          description: Bad request
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: The token is required.
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: jwt expired | invalid token
+  /products:
+    get:
+      tags:
+      - Products
+      summary: Get All products
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/definitions/Products'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    post:
+      tags:
+      - Products
+      summary: Create new product
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: Product data
+          required: true
+          schema:
+            properties:
+              product_name:
+                type: string
+              product_description: 
+                type: string
+              product_price: 
+                type: number
+              productImage: 
+                type: string
+              stock: 
+                type: number
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: product created successfully.
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    put:
+      tags:
+      - Products
+      summary: Update product
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: Product data
+          required: true
+          schema:
+            properties:
+              productID:
+                type: number
+              product_name:
+                type: string
+              product_description: 
+                type: string
+              product_price: 
+                type: number
+              stock: 
+                type: number
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: product updated successfully.
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    delete:
+      tags:
+      - Products
+      summary: Delete product
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: User login credentials
+          required: true
+          schema:
+            properties:
+              productID:
+                type: number
+      security:
+        - Token: []
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /products/{id}:
+    get:
+      tags:
+      - Products
+      summary: Get product by id
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Product id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                $ref: '#/definitions/Product'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /paymentMethods:
+    get:
+      tags:
+      - Payment methods
+      summary: Get All products
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                $ref: '#/definitions/PaymentMethods'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    post:
+      tags:
+      - Payment methods
+      summary: Create payment method
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              payment_method_name:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: payment method created successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    put:
+      tags:
+      - Payment methods
+      summary: Update payment method
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              payment_method_id:
+                type: number
+              payment_method_name:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: payment method updated successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    delete:
+      tags:
+      - Payment methods
+      summary: Delete payment method
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              payment_method_id:
+                type: number
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: payment method archived
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'  
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /paymentMethods/{id}:
+    get:
+      tags:
+      - Payment methods
+      summary: Get payment method
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Payment method id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                $ref: '#/definitions/PaymentMethod'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again     
+  /orderStatuses:
+    get:
+      tags:
+      - Order statuses
+      summary: Get All order statuses
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        order_status_status:
+                          enum:
+                          - active
+                          - draft
+                        order_name:
+                          type: string
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    post:
+      tags:
+      - Order statuses
+      summary: Create order status
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              order_name:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: order status created successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    put:
+      tags:
+      - Order statuses
+      summary: Update order status
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              order_status_id:
+                type: number
+              order_name:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: order status updated successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    delete:
+      tags:
+      - Order statuses
+      summary: Delete order status
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              order_status_id:
+                type: number
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: order status archived successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /orderStatuses/{id}:
+    get:
+      tags:
+      - Order statuses
+      summary: Get order status by id
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Product id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                $ref: '#/definitions/Product'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /orders:
+    get:
+      tags:
+      - Orders
+      summary: Get All orders
+      consumes:
+      - application/json
+      security:
+        - Token: []
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                $ref: '#/definitions/Orders'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    post:
+      tags:
+      - Orders
+      summary: Create order
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              customer_id:
+                type: number
+              payment_method:
+                type: number
+              products_data:
+                type: object
+                properties:
+                  product_id:
+                    type: number
+                  cuantity:
+                    type: number
+              address:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: order created successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+    delete:
+      tags:
+      - Orders
+      summary: Delete order
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              order_id:
+                type: number
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: order deleted successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /orders/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Get order by id
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: path
+          name: id
+          description: Order id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                $ref: '#/definitions/Order'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again    
+  /orders/products/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Get order products
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      security:
+        - Token: []
+      parameters:
+        - in: path
+          name: id
+          description: Order id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                type: object
+                properties:
+                  orderProducts:
+                    $ref: '#/definitions/Product'
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again     
+  /orders/history/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Get order status history
+      security:
+        - Token: []
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Product id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              data:
+                type: object
+                properties:
+                  orderHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        order_status_name:
+                          type: string
+                        order_status_date:
+                          type: string
+              message: 
+                type: string
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+  /orders/status:
+   put:
+      tags:
+      - Orders
+      summary: Update order status
+      security:
+        - Token: []
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: body
+          description: payment method data
+          required: true
+          schema: 
+            properties:
+              order_id:
+                type: number
+              status_id:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: order updated successfully
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ResponseNoFields'
+        500:
+          description: Server error
+          schema:
+            properties: 
+              status:
+                type: boolean
+              message: 
+                type: string
+                example: There was an error please try again
+      
+
+definitions:
+  Product:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      user_id:
+        type: integer
+        format: int64
+      product_status:
+        type: string
+        description: Product status
+        enum:
+        - active
+        - draft
+      product_name:
+        type: string
+      product_description:
+        type: string
+      product_price:
+        type: number
+        default: 0
+      product_stock:
+        type: number
+        default: 0
+      product_discount:
+        type: number
+        default: 0
+      product_poster:
+        type: string
+  Products:
+    type: object
+    additionalProperties:
+      $ref: '#/definitions/Product'
+  ResponseNoFields:
+    type: object
+    properties:
+      status:
+        type: boolean
+      errors:
+        type: array
+        items: {}
+      message:
+        type: string
+        example: Some fields has errors.
+  PaymentMethod:
+    type: object
+    properties:
+      id: 
+        type: number
+      payment_method_status:
+        enum:
+        - active
+        - draft
+      payment_method_name:
+        type: string
+  PaymentMethods:
+    type: object
+    additionalProperties:
+      $ref: '#/definitions/PaymentMethod'
+  Order:
+    type: object
+    properties:
+      id:
+        type: string
+      customer_id:
+        type: string
+      payment_method:
+        type: number
+      description:
+        type: string
+      order_actual_status:
+        type: string
+      total_paid:
+        type: number
+      address:
+        type: string
+      order_status_name:
+        type: string
+      payment_method_name:
+        type: string
+      customer_name:
+        type: string
+  Orders:
+    type: object
+    additionalProperties:
+      $ref: '#/definitions/Order'
+
+components:
+  securitySchemes:
+    Token:
+      type: string
+      in: header
+      name: Authorization
+
+host: virtserver.swaggerhub.com
+basePath: /kismusito/Delilah/1.0.0
+schemes:
+ - http

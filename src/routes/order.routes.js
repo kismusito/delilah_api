@@ -1,15 +1,45 @@
 import express from "express";
 const router = express.Router();
 import { OrderController } from "../controllers";
-import { AuthMiddleware } from "../middlewares";
+import { AuthMiddleware, AccessControl } from "../middlewares";
 
 router
-    .get("/", AuthMiddleware, OrderController.getOrders)
-    .get("/:id", AuthMiddleware, OrderController.getOrder)
-    .get("/products/:id", AuthMiddleware, OrderController.getOrderProducts)
-    .get("/history/:id", AuthMiddleware, OrderController.getOrderStatusHistory)
-    .post("/", AuthMiddleware, OrderController.createOrder)
-    .put("/status", AuthMiddleware, OrderController.updateOrderStatus)
-    .delete("/", AuthMiddleware, OrderController.deleteOrder);
+    .get("/", AuthMiddleware, AccessControl("admin"), OrderController.getOrders)
+    .get(
+        "/:id",
+        AuthMiddleware,
+        AccessControl("admin"),
+        OrderController.getOrder
+    )
+    .get(
+        "/products/:id",
+        AuthMiddleware,
+        AccessControl("admin"),
+        OrderController.getOrderProducts
+    )
+    .get(
+        "/history/:id",
+        AuthMiddleware,
+        AccessControl("admin"),
+        OrderController.getOrderStatusHistory
+    )
+    .post(
+        "/",
+        AuthMiddleware,
+        AccessControl("admin"),
+        OrderController.createOrder
+    )
+    .put(
+        "/status",
+        AuthMiddleware,
+        AccessControl("admin"),
+        OrderController.updateOrderStatus
+    )
+    .delete(
+        "/",
+        AuthMiddleware,
+        AccessControl("admin"),
+        OrderController.deleteOrder
+    );
 
 export { router as OrderRoutes };

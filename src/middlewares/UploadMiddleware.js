@@ -29,5 +29,3 @@ export const Upload = (destination) => {
         storage,
     });
 };
-
-console.log();
