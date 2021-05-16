@@ -18,9 +18,9 @@ Delilah requires [Node.js](https://nodejs.org/) v10+ to run and mysql, i use xam
 
 For this project you need to start your mysql server, and import the database, you can find it in the database sql file in the root of the project
 
-Configure .env
+### Configure .env
 
-
+change the file .env.template to .env
 
 ```sh
 PRIVATE_KEY= private key for token
