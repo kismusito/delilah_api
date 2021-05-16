@@ -20,6 +20,8 @@ For this project you need to start your mysql server, and import the database, y
 
 Configure .env
 
+
+
 ```sh
 PRIVATE_KEY= private key for token
 
@@ -27,6 +29,20 @@ DBHOST= host
 DBNAME= database name
 DBUSER= database user
 DBPASSWORD= database password
+```
+
+#### Preconfigured credentials
+
+when you import the database you can find some userd pre-created
+
+```sh
+Admin
+    email: admin@gmail.com
+    password: admin
+
+Normal user
+    email: user@gmail.com
+    password: user
 ```
 
 if this not works configure acces in src/config/index.js
