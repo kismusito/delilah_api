@@ -12,14 +12,11 @@
 
 ## Installation
 
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run and mysql, i use xampp
+Delilah requires [Node.js](https://nodejs.org/) v10+ to run and mysql, i use xampp
 
-Enable mysql server
+### Important
 
-```sh
-start mysql server
-import database
-```
+For this project you need to start your mysql server, and import the database, you can find it in the database sql file in the root of the project
 
 Configure .env
 
